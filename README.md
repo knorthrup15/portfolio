@@ -1,7 +1,8 @@
 # Data Scientist
+Technical Skills: Python, MATLAB, SQL, RStudio
 
 ### Education
-Data Science, Bachelors
+B.S., Data Science  The University of Arizona (December 2026)
 
 ### Work Experience
 
