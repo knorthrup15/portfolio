@@ -6,7 +6,7 @@ Technical Skills:
 - Tools: Rstudio, GitHub
 
 ### Education
-B.S., Data Science  The University of Arizona (December 2026)
+B.S., Data Science  The University of Arizona
 
 ### Projects
 
