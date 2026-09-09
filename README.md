@@ -3,7 +3,7 @@ Technical Skills:
 - Languages: Python, R, SQL
 - Libraries/Tools: pandas, NumPy, matplotlib, seaborn, tidyverse
 - Databases: MySQL
-- Tools: Rstudio, Visual Studio Code, GitHub
+- Tools: Rstudio, GitHub
 
 ### Education
 B.S., Data Science  The University of Arizona (December 2026)
@@ -23,4 +23,4 @@ Used linear and logistic regression to identify which lifestyle and demographic 
 Built an end-to-end pipeline combining MovieLens user ratings/tags with TMDb financial data (budget, revenue, production company) to explore whether audience sentiment predicts box office success. Designed a normalized relational schema in MySQL, enriched data via the TMDb API under real rate-limit constraints, and ran SQL-driven analyses in Python/Matplotlib. Found a clear "blockbuster effect" in profit concentration and only mixed alignment between user ratings and revenue — financial success often diverges sharply from critical reception.
 
 ## Contact
-[GitHub](https://github.com/knorthrup15) [LinkedIn](https://www.linkedin.com/in/katie-northrup-153a5b292/) [Email](katie.northrup2005@yahoo.com)
+[GitHub](https://github.com/knorthrup15) [LinkedIn](https://www.linkedin.com/in/katie-northrup-153a5b292/) 
