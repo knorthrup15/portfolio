@@ -1,0 +1,481 @@
+---
+title: "NHANESanalyzer-vignette"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 2
+vignette: >
+  %\VignetteIndexEntry{NHANESanalyzer-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, echo = FALSE}
+suppressPackageStartupMessages(library(NHANESanalyzer))
+suppressPackageStartupMessages(library(dplyr))
+suppressPackageStartupMessages(library(haven))
+suppressPackageStartupMessages(library(ggplot2))
+suppressPackageStartupMessages(library(tibble))
+```
+
+
+## Introduction
+
+#### Group Members
+
+Sedona Noely O'Hearn
+
+Miguel Bustio Garcia
+
+Katie Northrup
+
+Andrew Gibson
+
+#### Goal of NHANESanalyzer
+
+This package lets even those with rudimentary coding knowledge be able to quickly get information about their healthcare dataset provided it’s in the correct format. They can perform tasks such as summarizing overall data, accessing individual data results and creating graphs from the data.
+
+<table>
+
+ Functions                   
+ ---------------------------- ------------------------ --------------------------
+ nhanes_results               get_info                 summarize_numeric
+ var_names                    get_data                 summarize_categorical 
+ var_averages                 plot_distribution        missing_summary
+ get_ratio                    scatterplot              summarize_by_group 
+ compare                      plot_individual          summarize_all
+ 
+<table>
+
+
+**Included Data**
+
+1. **BMX_L.xpt**-An NHANES data set related to bodily measurements. Other than BMI (which is just an index), all shown measurements are in cm, as well as having an associated comment from the doctor (usually NA). It is of note that patient IDs start at the number 130378.
+
+**Necessary Packages**
+```{r, eval = FALSE}
+# common packages
+library(NHANESanalyzer)
+library(dplyr)
+library(haven)
+library(ggplot2)
+library(tibble)
+```
+
+
+\newpage
+
+
+## Get Data
+
+**Motivation**: Loads in the data set in data.frame form in order to be used in the other functions
+
+### Using Get Data
+
+Get Data produces outputs:
+
+1. Data.frame object with all IDs and their corresponding measurements
+
+Get Data has no () main options
+
+**Example**:
+```{r}
+df <- get_data()
+```
+
+
+### Limitations of Get Data
+
+1. BMX_L.xpt must be downloaded (default in the package) as well as the haven library being imported in order for this function to be used
+
+\newpage
+
+
+## Var Names
+
+**Motivation**: Show the human-readable version of the variables that make the columns of the data set. These human-readable versions will be the ones used for input into the other functions.
+
+### Using Var Names
+
+Var Names produces outputs:
+
+1. A string listing all user-friendly variable names.
+
+Var Names has no () main options
+
+**Example**:
+```{r}
+var_names()
+```
+
+
+### Limitations of Var Names
+
+1. The names of the variables are taken from a dictionary called **variables** that has them as keys, with their counterparts in the data set as values. This dictionary comes with the package, and it is also what the other functions use in order to access the data set from user-friendly inputs.
+
+\newpage
+
+
+## NHANES Results
+
+**Motivation**: Showcase the results for the measurements for a particular ID.
+
+### Using NHANES Results
+
+NHANES Results produces outputs:
+
+1. A string listing the values for the measurements of the selected id. If the values also have a corresponding comment from the doctor (which they usually don't), the comment is also shown.
+
+NHANES Results has () main options:
+
+1. id - The chosen ID results are wanted from (integer)
+2. data - data frame obtained from the data set
+3. requests - A vector storing the names of all the variables we want results from. If no requests are provided, results for every variable are automatically displayed.
+
+**Example**:
+```{r}
+nhanes_results(130378, df)
+nhanes_results(130378, df, c("recumbent length", "BMI"))
+```
+
+
+### Limitations of NHANES Results
+
+1. ID must exist in the data set. If not, a message will warn the user.
+2. Variable must also exist in the data set. If not, a message pops up telling the user to refer to the var_names functions in order to choose a valid variable.
+3. Not much of a limitation, but it is important to mention that NHANES Results uses the get_info helper function, which is essentially a compressed version of this function that only gets results for a single variable.
+
+\newpage
+
+
+## Get Ratio
+
+**Motivation**: Allows the user to obtain the ratio between two measurements.
+
+### Using Get Ratio
+
+Get Ratio produces outputs:
+
+1. A string displaying the obtained information about the ratio of the two variables
+
+Get Ratio has () main options:
+
+1. id - The chosen ID results are wanted from (integer)
+2. data - data frame obtained from the data set
+3. v1 - The first variable we want to calculate the ratio from (string)
+4. v2 - The second variable we want to calculate the ratio from (string)
+
+**Example**:
+```{r}
+get_ratio(130378, df, "waist circumference", "hip circumference")
+```
+
+### Limitations of Get Ratio
+
+1. ID must exist in the data set. If not, a message will warn the user.
+2. Variable must also exist in the data set. If not, a message pops up telling the user to refer to the var_names functions in order to choose a valid variable.
+
+\newpage
+
+
+## Compare
+
+**Motivation**: Compare the value for an ID's variable to the national average. Since the data set does not specify gender, the averages for men and women have been combined.
+
+### Using Compare
+
+PCA produces outputs:
+
+1. A string telling the user whether the compared value is above, below or right on the national average, and by how much.
+
+Compare has () main options:
+
+1. id - The chosen ID results are wanted from (integer)
+2. data - data frame obtained from the data set
+3. name - name of the variable to be compared to the national average (string)
+
+**Example**:
+```{r}
+compare(130378, df, "BMI")
+```
+
+
+### Limitations of Compare
+
+1. ID must exist in the data set. If not, a message will warn the user.
+2. Variable must also exist in the data set. If not, a message pops up telling the user to refer to the var_names functions in order to choose a valid variable.
+3. As mentioned above, the fact that the data set does not distinguish by gender means the averages will not be fully indicative of what a person of a certain gender's measurements are usually like
+4. The package has a dictionary by default storing the averages in order for them to be compared called **averages**. In order to view this dictionary, the user can use the var_averages() function, which takes no arguments.
+
+```{r}
+var_averages()
+```
+
+
+### Similar Functions/Packages
+
+* Stats
+    + princomp()
+* Base R
+    + scale()
+    + eigen()
+
+
+\newpage
+
+### Plot Distribution
+
+Plot Distribution produces outputs:
+
+1. A histogram showing the distribution of an entire column using all the rows with values.
+
+Plot Distribution has () main options:
+
+1. df - the dataframe loaded into the function
+2. var - the chosen column to be plotted (string)
+
+**Example**:
+```{r}
+plot_distribution(df, "arm circumference")
+```
+
+### Limitations of Plot Distribution
+
+1. Variable must exist in the data set. If not, a message pops up telling the user to refer to the var_names functions in order to choose a valid variable.
+2. Bin argument is set to 30 but may need to be adjusted depending on chosen variable.
+
+### Similar Functions/Packages
+
+* Base R
+    + hist()
+* GGplot2: : geom_histogram()
+
+\newpage
+
+### Scatterplot
+
+Scatterplot produces outputs:
+
+1. A scatterplot showing all the values of 2 variables paired together on a x y plot.
+2. a regression line showing trend between two variables.
+
+Scatterplot has () main options:
+
+1. df - the dataframe loaded into the function
+2. x_var - the chosen variable to plotted on the x axis (string)
+3. y_var - the chosen variable to plotted on the y axis (string)
+4. smooth - toggle regression line on and off (TRUE/FALSE)
+
+**Example**:
+```{r}
+plot_scatter(df, "height", "BMI")
+```
+
+### Limitations of Scatterplot
+
+1. Both variables must exist in the data set. If not, a message pops up telling the user to refer to the var_names functions in order to choose valid variables.
+2. There could be an uneven amount of missing variables between the two columns which could lead unreliable line.
+
+### Similar Functions/Packages
+
+* Base R
+    + plot()
+* GGplot2: :geom_point()
+
+\newpage
+
+### Plot Kernel Density
+
+Plot Kernel Density produces outputs:
+
+1. A kernel density estimate curve with shaded region using guassian showing distribution of a variable.
+
+Plot Kernel Density has () main options:
+
+1. df - the dataframe loaded into the function
+2. var - the chosen variable to plotted and calculated
+3. h - toggles the bandwidth (leave blank for default)
+
+**Example**:
+```{r}
+plot_kde(df, "upper leg length", h = 5)
+```
+
+### Limitations of Plot Kernel Density
+
+1. Variable must exist in the data set. If not, a message pops up telling the user to refer to the var_names functions in order to choose valid variables.
+2. choosing a bandwidth that is too small or too large could over or undersmooth the curve not showing true distribution.
+
+### Similar Functions/Packages
+
+* Base R
+    + density()
+* GGplot2: : geom_density()
+
+\newpage
+
+
+## Summarize Numeric
+
+**Motivation**: Allows the user to quickly obtain descriptive statistics (mean, median, sd, min, max, and missing counts) for any selected numeric measurement in the NHANES dataset. 
+
+### Using Summarize Numeric
+
+Summarize Numeric produces outputs:
+
+1. A tibble with summary statistics for each selected variable
+2. A column identifying the human-readable variable name
+3. A column showing the original NHANES column name
+
+Summarize Numeric has () main options:
+
+1. df - the dataframe loaded by get_data()
+2. vars - vector of human-readable variable names (string vector)
+3. na_rm - whether to remove NA values (TRUE/FALSE)
+
+**Example**:
+```{r}
+summarize_numeric(df, c("height", "BMI"))
+```
+
+
+### Limitations of Summarize Numeric
+
+1. Variables must exist in the dataset. If not, a warning instructs the user to run var_names().
+2. Variables must be numeric; NHANES comment columns are automatically ignored. 
+3. Missing data can affect summary accuracy when na_rm = FALSE.
+
+\newpage
+
+
+## Summarize Categorical 
+
+**Motivation**: Some NHANES measurement columns contain doctor comments or categorization. This function summarizes the frequency and proportion of each category.
+
+### Using Summarize Categorical
+
+Summarize Categorical produces outputs:
+
+1. A tibble showing category name, count, and proportion
+2. One row per level of the selected variables
+3. NA is included explicitly as a category
+
+Summarize Categorical has () main options:
+
+1. df – dataframe loaded via get_data()
+2. vars – vector of human-readable variable names (string vector)
+
+**Example**:
+```{r}
+summarize_categorical(df, c("head circumference"))
+```
+
+
+### Limitations of Summarize Categorical
+
+1. Variables must exist and must be categorical (comment columns typically are).
+2. Very high NA rates may lead to misleading proportions.
+3. Only variables with comment fields are likely to produce meaningful output.
+
+\newpage
+
+
+## Missing Summary
+
+**Motivation**: The NHANES dataset contains many unrecorded measurements. This function provides a fast overview of missingness for every column, translated into human-readable variable names when possible.
+
+### Using Missing Summary
+
+Missing Summary Produces:
+
+1. A tibble listing each variable
+2. Missing count
+3. Missing percentage
+
+Missing Summary has () main options:
+
+1. df – dataframe loaded with get_data()
+
+**Example**:
+```{r}
+missing_summary(df)
+```
+
+
+### Limitations of Missing Summary
+
+1. Some NHANES columns do not have human-readable names and will appear with their raw names.
+2. High missingness is expected for doctor comment fields, which contain few recorded values.
+
+\newpage
+
+
+## Summarize By Group
+
+**Motivation**: Allows users to compare numeric measurements across any NHANES categorical grouping variable (for example, comparing BMI values across comment categories).
+
+### Using Summarize By Group
+
+Summarize By Group produces outputs:
+
+1. A tibble showing the mean, standard deviation, and count for each group
+2. Only non-missing groups are included
+3. Values are computed using the numeric measurement column
+
+Summarize By Group has () main options:
+
+1. df – dataframe
+2. group_var – human-readable variable to group by
+3. target_var – human-readable numeric variable
+4. na_rm – remove NA values (TRUE/FALSE)
+
+**Example**:
+```{r}
+summarize_by_group(df, "waist circumference", "BMI")
+```
+
+
+### Limitations of Summarize By Group
+
+1. Group variable must be categorical.
+2. Target variable must be numeric.
+3. If groups are extremely unbalanced or rare, output may be unstable.
+
+\newpage
+
+
+## Summarize All
+
+**Motivation**: Provides a complete summary of the NHANES dataset in one function call. Intended as the primary high-level overview function for quickly exploring the data.
+
+### Using Summarize All
+
+Summarize All produces outputs:
+
+1. Dataset metadata (number of rows and columns)
+2. Numeric summary for all human-readable variables
+3. Missing data summary
+4. Categorical summary (reserved for future versions)
+
+Summarize All has () main options:
+
+1. df – dataframe loaded using get_data()
+
+**Example**:
+```{r}
+NHANESanalyzer::summarize_all(df)
+```
+
+
+### Limitations of Summarize All
+
+1. Only variables defined in the package’s variables dictionary are included in numeric summaries.
+2. Categorical summaries are currently limited and may be expanded in future releases.
+3. Missing percentages may be high due to NHANES collection patterns.

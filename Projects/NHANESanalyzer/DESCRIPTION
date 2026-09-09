@@ -1,0 +1,21 @@
+Package: NHANESanalyzer
+Title: NHANES Body Measures Data Set Analysis
+Version: 0.0.0.9000
+Authors@R: c(person("Sedona", "O'Hearn", email = "snohearn@arizona.edu", role = c("aut", "cre")), person("Miguel", "Bustio Garcia", role = "aut"), person("Katie", "Northrup", role = "aut"), person("Andrew", "Gibson", role = "aut"))
+Description: This package lets even those with rudimentary coding knowledge be able to quickly get information about their healthcare dataset provided it’s in the correct format. They can perform tasks such as summarizing overall data, accessing individual data results and creating graphs from the data.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Imports: haven, dplyr, ggplot2, tibble
+Suggests: knitr, rmarkdown
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+VignetteBuilder: knitr
+Depends: R (>= 3.5)
+LazyData: true
+NeedsCompilation: no
+Packaged: 2026-04-28 06:00:11 UTC; snohearn
+Author: Sedona O'Hearn [aut, cre],
+  Miguel Bustio Garcia [aut],
+  Katie Northrup [aut],
+  Andrew Gibson [aut]
+Maintainer: Sedona O'Hearn <snohearn@arizona.edu>
