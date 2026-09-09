@@ -1,5 +1,8 @@
 # Data Scientist
-Technical Skills: Python, MATLAB, SQL, RStudio
+Technical Skills:
+- Languages: Python, R, SQL
+- Libraries/Tools: pandas, NumPy, matplotlib, seaborn, RStudio, tidyverse
+- Databases: MySQL
 
 ### Education
 B.S., Data Science  The University of Arizona (December 2026)
